@@ -5,16 +5,12 @@ const app = express();
 const port = process.env.PORT || 4000;
 const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/fischkapp';
 
-mongoose.connect(dbURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection failed:'));
-db.once('open', () => {
-  console.log('connection successful');
-});
+mongoose.connect(dbURI)
+  .then(() => console.log('connection successful'))
+  .catch((error) => {
+    console.error('connection error:', error);
+    process.exit(1);
+  });
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
