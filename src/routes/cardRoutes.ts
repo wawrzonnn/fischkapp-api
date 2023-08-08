@@ -45,4 +45,35 @@ router.put('/:id', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        const cards = await Card.find().sort({ createdAt: -1 }); 
+        res.send(cards);
+    } catch (error) {
+        res.status(500).send('An error occurred while fetching the cards.');
+    }
+});
+
+router.get('/author/:author', async (req: Request, res: Response) => {
+    const { author } = req.params;
+
+    try {
+        const cards = await Card.find({ author }).sort({ createdAt: -1 });
+        res.send(cards);
+    } catch (error) {
+        res.status(500).send('An error occurred while fetching the cards for the specified author.');
+    }
+});
+
+router.get('/tags/:tag', async (req: Request, res: Response) => {
+    const { tag } = req.params;
+
+    try {
+        const cards = await Card.find({ tags: tag }).sort({ createdAt: -1 });
+        res.send(cards);
+    } catch (error) {
+        res.status(500).send('An error occurred while fetching the cards with the specified tag.');
+    }
+});
+
 export default router
