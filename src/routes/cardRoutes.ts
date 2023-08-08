@@ -76,4 +76,26 @@ router.get('/tags/:tag', async (req: Request, res: Response) => {
     }
 });
 
+router.delete('/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        const card = await Card.findById(id);
+
+        if (!card) {
+            return res.status(404).send('Card not found.');
+        }
+
+        const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+
+        if (card.createdAt.getTime() < fiveMinutesAgo) {
+            return res.status(400).send('You can only delete a card within 5 minutes of its creation.');
+        }
+
+        await card.deleteOne();
+        res.status(204).send(); 
+    } catch (error) {
+        res.status(500).send('An error occurred while trying to delete the card.');
+    }
+});
 export default router
