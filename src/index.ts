@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import cardRoutes from './routes/cardRoutes';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -11,6 +12,10 @@ mongoose.connect(dbURI)
     console.error('connection error:', error);
     process.exit(1);
   });
+
+app.use(express.json());
+
+app.use('/cards', cardRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
