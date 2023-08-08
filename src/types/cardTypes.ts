@@ -4,3 +4,9 @@ export interface CreateCardPayload {
     tags: string[];
     author: string;
  }
+
+ export interface UpdateCardPayload {
+    front: string;
+    back: string;
+    tags: string[];
+ }
