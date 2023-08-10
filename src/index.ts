@@ -1,4 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express, { Request, Response } from 'express';
+import cors from 'cors';
+import corsOptions from './config/corsConfig';
 import mongoose from 'mongoose';
 import cardRoutes from './routes/cardRoutes';
 
@@ -14,7 +18,7 @@ mongoose.connect(dbURI)
   });
 
 app.use(express.json());
-
+app.use(cors(corsOptions));
 app.use('/cards', cardRoutes);
 
 app.get('/', (req: Request, res: Response) => {
