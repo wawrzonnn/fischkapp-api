@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import { Card } from '../models/card'
 import { CreateCardPayload, UpdateCardPayload } from '../types/cardTypes'
+import mongoose from 'mongoose'
 
 const router = Router()
 
@@ -81,7 +82,9 @@ router.delete('/:id', async (req: Request, res: Response) => {
 
     try {
         const card = await Card.findById(id);
-
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send('Invalid ID format.');
+        }
         if (!card) {
             return res.status(404).send('Card not found.');
         }
@@ -89,13 +92,17 @@ router.delete('/:id', async (req: Request, res: Response) => {
         const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
 
         if (card.createdAt.getTime() < fiveMinutesAgo) {
-            return res.status(400).send('You can only delete a card within 5 minutes of its creation.');
+            return res.status(403).send('You can only delete a card within 5 minutes of its creation.');
         }
 
         await card.deleteOne();
         res.status(204).send(); 
     } catch (error) {
+        console.error('Error while trying to delete the card:', error);
         res.status(500).send('An error occurred while trying to delete the card.');
     }
 });
+
+
+
 export default router
