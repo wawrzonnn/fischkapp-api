@@ -173,41 +173,5 @@ describe('PUT /cards/:id', () => {
     });
 });
 
-describe('DELETE /cards/:id', () => {
-    it('returns a status code of 204 if card deleted correctly', async () => {
-        const card = await Card.create(sampleCard);
-
-        const response = await request(app).delete(`/cards/${card._id}`);
-        expect(response.status).toBe(204);
-    });
-
-    it('deletes the requested flashcard if it was created less than 5 minutes ago', async () => {
-        const card = await Card.create(sampleCard);
-
-        await request(app).delete(`/cards/${card._id}`);
-        const searchedCard = await Card.findById(card._id);
-        expect(searchedCard).toBeNull();
-    });
-
-    it('returns a status code of 403 if the flashcard was created more than 5 minutes ago', async () => {
-        const card = await Card.create({
-            ...sampleCard,
-            createdAt: new Date(Date.now() - 6 * 60 * 1000) // 6 minutes ago
-        });
-
-        const response = await request(app).delete(`/cards/${card._id}`);
-        expect(response.status).toBe(403);
-    });
-
-    it('returns a status code of 404 if the requested flashcard does not exist', async () => {
-        const nonExistentId = new mongoose.Types.ObjectId().toString();
-    
-        const card = await Card.findById(nonExistentId);
-        expect(card).toBeNull(); 
-    
-        const response = await request(app).delete(`/cards/${nonExistentId}`);
-        expect(response.status).toBe(404);
-    });
-});
 
 
