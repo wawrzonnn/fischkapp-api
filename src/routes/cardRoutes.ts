@@ -89,7 +89,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
         const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
 
         if (card.createdAt.getTime() < fiveMinutesAgo) {
-            return res.status(400).send('You can only delete a card within 5 minutes of its creation.');
+            return res.status(403).send('You can only delete a card within 5 minutes of its creation.');
         }
 
         await card.deleteOne();

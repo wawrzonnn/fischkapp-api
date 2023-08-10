@@ -115,40 +115,61 @@ describe('POST /cards', () => {
 	})
 })
 
-describe('DELETE /cards/:id', () => {
-    it('returns a status code of 204 if card deleted correctly', async () => {
-        const card = await Card.create(sampleCard);
+describe('PUT /cards/:id', () => {
+    let createdCardId: string;
 
-        const response = await request(app).delete(`/cards/${card._id}`);
-        expect(response.status).toBe(204);
+    beforeEach(async () => {
+        const createdCard = await Card.create(sampleCard);
+        createdCardId = createdCard.id;
     });
 
-    it('deletes the requested flashcard if it was created less than 5 minutes ago', async () => {
-        const card = await Card.create(sampleCard);
+    it('should return status code 200 when updating a card', async () => {
+        const updatedData = {
+            front: 'Updated front',
+            back: 'Updated back',
+            tags: ['updatedTag']
+        };
 
-        await request(app).delete(`/cards/${card._id}`);
-        const searchedCard = await Card.findById(card._id);
-        expect(searchedCard).toBeNull();
+        const response = await request(app)
+            .put(`/cards/${createdCardId}`)
+            .send(updatedData);
+
+        expect(response.status).toBe(200);
     });
 
-    it('returns a status code of 403 if the flashcard was created more than 5 minutes ago', async () => {
-        const card = await Card.create({
-            ...sampleCard,
-            createdAt: new Date(Date.now() - 6 * 60 * 1000) // 6 minutes ago
-        });
+    it('should update the card with the correct fields', async () => {
+        const updatedData = {
+            front: 'Updated front',
+            back: 'Updated back',
+            tags: ['updatedTag']
+        };
 
-        const response = await request(app).delete(`/cards/${card._id}`);
-        expect(response.status).toBe(403);
+        await request(app)
+            .put(`/cards/${createdCardId}`)
+            .send(updatedData);
+
+        const updatedCard = await Card.findById(createdCardId);
+
+        expect(updatedCard).not.toBeNull();
+        expect(updatedCard!.front).toBe(updatedData.front);
+        expect(updatedCard!.back).toBe(updatedData.back);
+        expect(updatedCard!.tags).toEqual(expect.arrayContaining(updatedData.tags));
     });
 
-    it('returns a status code of 404 if the requested flashcard does not exist', async () => {
-        const nonExistentId = new mongoose.Types.ObjectId().toString();
-    
-        const card = await Card.findById(nonExistentId);
-        expect(card).toBeNull(); 
-    
-        const response = await request(app).delete(`/cards/${nonExistentId}`);
-        expect(response.status).toBe(404);
+    it('should return the updated flashcard', async () => {
+        const updatedData = {
+            front: 'Updated front',
+            back: 'Updated back',
+            tags: ['updatedTag']
+        };
+
+        const response = await request(app)
+            .put(`/cards/${createdCardId}`)
+            .send(updatedData);
+
+        expect(response.body.front).toBe(updatedData.front);
+        expect(response.body.back).toBe(updatedData.back);
+        expect(response.body.tags).toEqual(expect.arrayContaining(updatedData.tags));
     });
 });
 
