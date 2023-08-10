@@ -171,4 +171,5 @@ describe('PUT /cards/:id', () => {
         expect(response.body.back).toBe(updatedData.back);
         expect(response.body.tags).toEqual(expect.arrayContaining(updatedData.tags));
     });
+
 });
