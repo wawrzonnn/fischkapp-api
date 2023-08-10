@@ -106,7 +106,7 @@ describe('POST /cards', () => {
 	})
 
 	it('should return status code 400 when card with specific front value already exists', async () => {
-		await Card.create(sampleCard) // Pre-create the card to trigger the error
+		await Card.create(sampleCard) 
 
 		const response = await request(app).post('/cards').send(sampleCard)
 
@@ -115,3 +115,60 @@ describe('POST /cards', () => {
 	})
 })
 
+describe('PUT /cards/:id', () => {
+    let createdCardId: string;
+
+    beforeEach(async () => {
+        const createdCard = await Card.create(sampleCard);
+        createdCardId = createdCard.id;
+    });
+
+    it('should return status code 200 when updating a card', async () => {
+        const updatedData = {
+            front: 'Updated front',
+            back: 'Updated back',
+            tags: ['updatedTag']
+        };
+
+        const response = await request(app)
+            .put(`/cards/${createdCardId}`)
+            .send(updatedData);
+
+        expect(response.status).toBe(200);
+    });
+
+    it('should update the card with the correct fields', async () => {
+        const updatedData = {
+            front: 'Updated front',
+            back: 'Updated back',
+            tags: ['updatedTag']
+        };
+
+        await request(app)
+            .put(`/cards/${createdCardId}`)
+            .send(updatedData);
+
+        const updatedCard = await Card.findById(createdCardId);
+
+        expect(updatedCard).not.toBeNull();
+        expect(updatedCard!.front).toBe(updatedData.front);
+        expect(updatedCard!.back).toBe(updatedData.back);
+        expect(updatedCard!.tags).toEqual(expect.arrayContaining(updatedData.tags));
+    });
+
+    it('should return the updated flashcard', async () => {
+        const updatedData = {
+            front: 'Updated front',
+            back: 'Updated back',
+            tags: ['updatedTag']
+        };
+
+        const response = await request(app)
+            .put(`/cards/${createdCardId}`)
+            .send(updatedData);
+
+        expect(response.body.front).toBe(updatedData.front);
+        expect(response.body.back).toBe(updatedData.back);
+        expect(response.body.tags).toEqual(expect.arrayContaining(updatedData.tags));
+    });
+});
