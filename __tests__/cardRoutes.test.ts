@@ -106,7 +106,7 @@ describe('POST /cards', () => {
 	})
 
 	it('should return status code 400 when card with specific front value already exists', async () => {
-		await Card.create(sampleCard) // Pre-create the card to trigger the error
+		await Card.create(sampleCard) 
 
 		const response = await request(app).post('/cards').send(sampleCard)
 
@@ -171,5 +171,5 @@ describe('PUT /cards/:id', () => {
         expect(response.body.back).toBe(updatedData.back);
         expect(response.body.tags).toEqual(expect.arrayContaining(updatedData.tags));
     });
-});
 
+});
