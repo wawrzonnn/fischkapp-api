@@ -86,3 +86,32 @@ describe('GET /cards/tags/:tag', () => {
         expect(response.body.length).toBe(1);
     });
 });
+
+describe('POST /cards', () => {
+	it('should return status code 201 when creating a card', async () => {
+		const response = await request(app).post('/cards').send(sampleCard)
+
+		expect(response.status).toBe(201)
+	})
+
+	it('should create a new card with the correct fields', async () => {
+		await request(app).post('/cards').send(sampleCard)
+
+		const card = await Card.findOne({ front: sampleCard.front })
+		expect(card).not.toBeNull()
+		expect(card!.front).toBe(sampleCard.front)
+		expect(card!.back).toBe(sampleCard.back)
+		expect(card!.tags).toEqual(expect.arrayContaining(sampleCard.tags))
+		expect(card!.author).toBe(sampleCard.author)
+	})
+
+	it('should return status code 400 when card with specific front value already exists', async () => {
+		await Card.create(sampleCard) // Pre-create the card to trigger the error
+
+		const response = await request(app).post('/cards').send(sampleCard)
+
+		expect(response.status).toBe(400)
+		expect(response.text).toBe('A card with the same front value already exists.')
+	})
+})
+
