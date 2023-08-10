@@ -5,6 +5,7 @@ import cors from 'cors';
 import corsOptions from './config/corsConfig';
 import mongoose from 'mongoose';
 import cardRoutes from './routes/cardRoutes';
+import { authMiddleware} from './middlewares/authMiddleware'
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -19,7 +20,7 @@ mongoose.connect(dbURI)
 
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use('/cards', cardRoutes);
+app.use('/cards', authMiddleware, cardRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
