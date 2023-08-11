@@ -7,159 +7,113 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
   "paths": {
     "/": {
       "post": {
-        "description": "",
+        "description": "Create a new card.",
+        "security": [{"api_key": []}],
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "front": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/Card"
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": {"description": "Created"},
+          "400": {"description": "Bad Request"},
+          "500": {"description": "Internal Server Error"}
         }
       },
       "get": {
-        "description": "",
+        "description": "Get all cards.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/Card"}
+            }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": {"description": "Internal Server Error"}
         }
       }
     },
     "/{id}": {
       "put": {
-        "description": "",
+        "description": "Update an existing card by ID.",
+        "security": [{"api_key": []}],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "front": {
-                  "example": "any"
-                },
-                "back": {
-                  "example": "any"
-                },
-                "tags": {
-                  "example": "any"
-                }
-              }
-            }
-          }
+          {"name": "id", "in": "path", "required": true, "type": "string"},
+          {"name": "body", "in": "body", "schema": {"$ref": "#/definitions/Card"}}
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": {"description": "OK"},
+          "404": {"description": "Not Found"},
+          "500": {"description": "Internal Server Error"}
         }
       },
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "description": "Delete a card by ID.",
+        "security": [{"api_key": []}],
+        "parameters": [{"name": "id", "in": "path", "required": true, "type": "string"}],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "204": {"description": "No Content"},
+          "403": {"description": "Forbidden"},
+          "404": {"description": "Not Found"},
+          "500": {"description": "Internal Server Error"}
         }
       }
     },
     "/author/{author}": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "author",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "description": "Get cards by author.",
+        "security": [{"api_key": []}],
+        "parameters": [{"name": "author", "in": "path", "required": true, "type": "string"}],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": {"description": "OK"},
+          "500": {"description": "Internal Server Error"}
         }
       }
     },
     "/tags/{tag}": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "tag",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "description": "Get cards by tag.",
+        "security": [{"api_key": []}],
+        "parameters": [{"name": "tag", "in": "path", "required": true, "type": "string"}],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": {"description": "OK"},
+          "500": {"description": "Internal Server Error"}
         }
       }
+    }
+  },
+  "definitions": {
+    "Card": 
+    {
+      "type": "object",
+      "properties": {
+        "front": {"type": "string", "description": "Front side of the card"},
+        "back": {"type": "string", "description": "Back side of the card"},
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Tags associated with the card"
+        },
+        "author": {"type": "string", "description": "Author of the card"},
+        "createdAt": {"type": "string", "format": "date-time", "description": "Card creation date"}
+      },
+      "required": ["front", "back", "author"]
     }
   }
 }
