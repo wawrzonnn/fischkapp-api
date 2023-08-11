@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "test": "jest"
+    "start": "node dist/src/index.js",
+    "test": "jest",
+    "generate-swagger": "ts-node ./swagger.ts"
   },
   "repository": "https://github.com/nerdbord/fischkapp-api.git",
   "author": "Nerdbord",
@@ -16,17 +17,22 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^7.4.2",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "swagger-autogen": "^2.23.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.3",
     "@types/supertest": "^2.0.12",
+    "@types/swagger-ui-express": "^4.1.3",
     "jest": "^29.6.2",
     "mongodb": "^5.7.0",
     "mongodb-memory-server": "^8.14.0",
     "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
 }
