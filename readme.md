@@ -22,28 +22,27 @@ The FischkApp API is a highly efficient and secure system for managing flashcard
 
 ## Features
 
-**·CRUD Operations**: Create, read, update, and delete flashcards.
+**· CRUD Operations**: Create, read, update, and delete flashcards.
 
-**·Simple Security**: Implemented basic security checks for API access.
+**· Simple Security**: Implemented basic security checks for API access.
 
-**·Automated Testing**: Extensive test suite using Jest and Supertest for robust API functionality.
+**· Automated Testing**: Extensive test suite using Jest and Supertest for robust API functionality.
 
-**·CORS Management**: Configured to handle Cross-Origin Resource Sharing (CORS).
-
+**· CORS Management**: Configured to handle Cross-Origin Resource Sharing (CORS).
 
 <br><br>
 
 ## Technologies
 
-**·Express.js**
+**· Express.js**
 
-**·TypeScript**
+**· TypeScript**
 
-**·MongoDB & Mongoose**
+**· MongoDB & Mongoose**
 
-**·Jest & Supertest**
+**· Jest & Supertest**
 
-**·Swagger**
+**· Swagger**
 
 <br><br>
 
@@ -78,6 +77,7 @@ npm run start
 ```
 
 The application will be running on **http://localhost:4000.**
+
 <br><br>
 
 ## API Endpoints
@@ -98,5 +98,4 @@ Run the test suite to ensure the API functions correctly:
 ```bash
 npm run test
 ```
-
 <br><br>
