@@ -78,7 +78,7 @@ describe('GET /cards/author/:author', () => {
 });
 
 describe('GET /cards/tags/:tag', () => {
-    it('should return correct number of cards with the requested tag', async () => {
+    it('should return correct n ested tag', async () => {
         await Card.create(sampleCard);
         await Card.create({ ...sampleCard, front: 'Second card', tags: ['tag2'] });
 
